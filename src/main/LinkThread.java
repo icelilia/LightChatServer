@@ -70,11 +70,7 @@ public class LinkThread extends Thread {
 
                     switch (messageNumber) {
                         // 注销
-                        case 0 -> {
-                            msg.msg0(dataBase, username);
-                            socket = null;
-                            username = null;
-                        }
+                        case 0 -> msg.msg0(dataBase, username);
                         // 获取好友列表
                         case 4 -> msg.message4(dataBase, dataOutputStream, username);
                         // 获取历史消息列表
@@ -99,6 +95,13 @@ public class LinkThread extends Thread {
                         case 17 -> msg.message17(dataBase, username);
                         // 更新个人信息
                         case 18 -> msg.message18(dataBase, username);
+                    }
+                    // 如果当前用户已注销，则跳出循环，释放socket连接
+                    if (messageNumber == 0) {
+                        socket.close();
+                        socket = null;
+                        username = null;
+                        break;
                     }
                 }
             }
