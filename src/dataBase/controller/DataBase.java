@@ -53,7 +53,7 @@ public class DataBase {
     /**
      * <用户名, socket>关联
      */
-    private final ConcurrentHashMap<String, Socket> socketTable = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, Socket> usernameSocketMap = new ConcurrentHashMap<>();
 
     /**
      * private构造函数，单例模式
@@ -544,7 +544,7 @@ public class DataBase {
      */
     synchronized public void addSocket(String username, Socket socket) {
         if (username != null) {
-            socketTable.put(username, socket);
+            usernameSocketMap.put(username, socket);
         }
     }
 
@@ -554,9 +554,9 @@ public class DataBase {
      * @param username 待查找用户的用户名
      * @return 对应连接的socket引用
      */
-    synchronized public Socket searchSocketByUsername(String username) {
+    synchronized public Socket searchOnlineUserByUsername(String username) {
         if (username != null) {
-            return socketTable.get(username);
+            return usernameSocketMap.get(username);
         }
         return null;
     }
@@ -567,12 +567,12 @@ public class DataBase {
      * @param username 待删除用户的用户名
      */
     synchronized public void delSocket(String username) {
-        if (username != null && searchSocketByUsername(username) != null) {
-            socketTable.remove(username);
+        if (username != null && searchOnlineUserByUsername(username) != null) {
+            usernameSocketMap.remove(username);
         }
     }
 
     public Set<String> showSocket() {
-        return socketTable.keySet();
+        return usernameSocketMap.keySet();
     }
 }
