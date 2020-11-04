@@ -120,6 +120,7 @@ public class LinkThread extends Thread {
             return;
         }
         try {
+            dataBase.delSocket(username);
             socket.close();
         } catch (IOException e) {
             e.printStackTrace();

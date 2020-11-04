@@ -5,23 +5,23 @@ import java.util.Date;
 
 public class Result {
     private final static SimpleDateFormat dateForm = new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss");
-    private int sessionId;
+    private String sessionId;
     private String receiverUsername;
     private String result;
     private String time;
 
     public Result(int sessionId, String receiverUsername, String result, Date date) {
-        this.sessionId = sessionId;
+        this.sessionId = String.valueOf(sessionId);
         this.receiverUsername = receiverUsername;
         this.result = result;
         this.time = dateForm.format(date);
     }
 
-    public int getSessionId() {
+    public String getSessionId() {
         return sessionId;
     }
 
-    public void setSessionId(int sessionId) {
+    public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
     }
 

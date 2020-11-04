@@ -21,14 +21,9 @@ import dataBase.entity.*;
 
 public class DataBase {
     /**
-     * MongoDB地址。
-     */
-    private static final String MONGODB_CONNECTION_STRING = "mongodb://LightChat:213533@175.24.10.214:27017";
-
-    /**
      * MongoDB连接。
      */
-    private final static MongoClient mongoClient = new MongoClient(new MongoClientURI(MONGODB_CONNECTION_STRING));
+    private final static MongoClient mongoClient = new MongoClient(new MongoClientURI(MongoDBAddress.MONGODB_CONNECTION_STRING));
 
     /**
      * LightChat数据库。
@@ -403,7 +398,7 @@ public class DataBase {
         boolean flag = false;
         Vector<Request> requests = receiver.getRequests();
         for (Request request : requests) {
-            if (request.getSenderUsername().contentEquals(senderUsername) && request.getSessionId() == sessionId) {
+            if (request.getSenderUsername().contentEquals(senderUsername) && Integer.parseInt(request.getSessionId()) == sessionId) {
                 requests.remove(request);
                 flag = true;
                 break;
