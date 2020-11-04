@@ -119,7 +119,7 @@ public class Message {
      *
      * @param username 待注销用户的用户名
      */
-    public void msg0(final DataBase dataBase, final String username) {
+    public void msg00(final DataBase dataBase, final String username) {
         dataBase.delSocket(username);
         System.out.println("用户" + "[" + username + "]" + "已登出");
     }
@@ -128,7 +128,7 @@ public class Message {
      * 初始化
      * 发送一个1r消息，表示服务器目前能够以处理这个连接
      */
-    public void msg1(final DataOutputStream dataOutputStream) throws IOException {
+    public void msg01(final DataOutputStream dataOutputStream) throws IOException {
         setMessageNumber("1r");
         sendMsg(dataOutputStream, this);
     }
@@ -139,7 +139,7 @@ public class Message {
      *
      * @return true：登录成功；false：登录失败
      */
-    public boolean msg2(final DataBase dataBase, final DataOutputStream dataOutputStream) throws IOException {
+    public boolean msg02(final DataBase dataBase, final DataOutputStream dataOutputStream) throws IOException {
         // 先获得用户名和密码
         String username = getMessageField1();
         String password = getMessageField2();
@@ -178,7 +178,7 @@ public class Message {
      * 注册
      * 检查用户名和密码是否合法后，发送一个3r消息并附带注册结果
      */
-    public void msg3(final DataBase dataBase, final DataOutputStream dataOutputStream) throws IOException {
+    public void msg03(final DataBase dataBase, final DataOutputStream dataOutputStream) throws IOException {
         User user = JSON.parseObject(getMessageField1(), User.class);
 
         String username = user.getUsername();
@@ -219,7 +219,7 @@ public class Message {
      *
      * @param username 请求者用户名
      */
-    public void msg4(final DataBase dataBase, final DataOutputStream dataOutputStream, final String username) throws IOException {
+    public void msg04(final DataBase dataBase, final DataOutputStream dataOutputStream, final String username) throws IOException {
         // 先获得所有的好友对象
         Vector<User> friends = dataBase.getFriends(username);
         Message message;
@@ -234,7 +234,7 @@ public class Message {
      *
      * @param username 请求者用户名
      */
-    public void msg5(final DataBase dataBase, final DataOutputStream dataOutputStream, final String username) throws IOException {
+    public void msg05(final DataBase dataBase, final DataOutputStream dataOutputStream, final String username) throws IOException {
         // 获取用户所有的session
         Vector<Integer> sessions = dataBase.getSessions(username);
 
@@ -264,7 +264,7 @@ public class Message {
      * @param dataOutputStream 输出流对象引用
      * @throws IOException 流IO错误
      */
-    public void msg6(final DataBase dataBase, final DataOutputStream dataOutputStream, final String creatorUsername) throws IOException {
+    public void msg06(final DataBase dataBase, final DataOutputStream dataOutputStream, final String creatorUsername) throws IOException {
         String sessionName = getMessageField1();
         if (sessionName != null && !sessionName.contentEquals("")) {
             // 创建群聊
@@ -285,7 +285,7 @@ public class Message {
      * 将messageField1字段的用户加入至messageField2字段的会话中
      * 若该用户已存在在此会话中，则什么也不做
      */
-    public void msg7(final DataBase dataBase, final DataOutputStream dataOutputStream) throws IOException {
+    public void msg07(final DataBase dataBase, final DataOutputStream dataOutputStream) throws IOException {
         // 目标用户
         String username = getMessageField1();
         // 目标会话
@@ -304,7 +304,7 @@ public class Message {
      *
      * @param username 请求者用户名
      */
-    public void msg8(final DataBase dataBase, final DataOutputStream dataOutputStream, final String username) throws IOException {
+    public void msg08(final DataBase dataBase, final DataOutputStream dataOutputStream, final String username) throws IOException {
         Vector<Request> requests = dataBase.getRequests(username);
         Message msg;
         msg = new Message("8r");
@@ -319,7 +319,7 @@ public class Message {
      *
      * @param senderUsername 发送者用户名，即应LinkThread中储存的username
      */
-    public void msg9(final DataBase dataBase, final String senderUsername) throws IOException {
+    public void msg09(final DataBase dataBase, final String senderUsername) throws IOException {
         // 内容除了messageNumber外不会变
         setMessageNumber("9r");
         // 会话编号
@@ -399,7 +399,7 @@ public class Message {
         int sessionId = Integer.parseInt(getMessageField2());
         String result = getMessageField3();
 
-        dataBase.checkRequest(requesterUsername, receiverUsername, sessionId, result);
+        dataBase.handleRequest(requesterUsername, receiverUsername, sessionId, result);
 
         Socket requestSocket = dataBase.searchOnlineUserByUsername(requesterUsername);
         if (requestSocket != null) {
@@ -437,29 +437,29 @@ public class Message {
         sendMsg(dataOutputStream, message);
     }
 
-    public void message15(DataBase dataBase, DataOutputStream dataOutputStream, String activeUsername)
+    public void msg15(DataBase dataBase, DataOutputStream dataOutputStream, String activeUsername)
             throws IOException {
         String passiveUsername = getMessageField1();
         dataBase.delFriend(activeUsername, passiveUsername);
         Socket passiveUserSocket = dataBase.searchOnlineUserByUsername(passiveUsername);
         if (passiveUserSocket != null) {
-            message16(passiveUserSocket, activeUsername);
+            msg16(passiveUserSocket, activeUsername);
         }
     }
 
-    private void message16(Socket passiveUserSocket, String activeUsername) throws IOException {
+    private void msg16(Socket passiveUserSocket, String activeUsername) throws IOException {
         Message message = new Message("16r");
         message.setMessageField1(activeUsername);
         DataOutputStream dataOutputStream = new DataOutputStream(passiveUserSocket.getOutputStream());
         sendMsg(dataOutputStream, message);
     }
 
-    public void message17(DataBase dataBase, String username) {
+    public void msg17(DataBase dataBase, String username) {
         int sessionId = Integer.parseInt(getMessageField1());
         dataBase.quitSession(username, sessionId);
     }
 
-    public void message18(DataBase dataBase, String username) {
+    public void msg18(DataBase dataBase, String username) {
         String userJSONString = getMessageField1();
         User user = JSON.parseObject(userJSONString, User.class);
         dataBase.updateUserInfo(user);

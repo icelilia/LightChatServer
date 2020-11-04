@@ -30,6 +30,15 @@ public class Main {
                     System.out.println(dataBase.showSocket());
                     continue;
                 }
+                if (order.contentEquals("kick")) {
+                    System.out.print("which user? : ");
+                    order = scanner.nextLine();
+                    if (order.contentEquals("all")) {
+                        for (LinkThread linkThread : linkThreads) {
+                            linkThread.forceOffline();
+                        }
+                    }
+                }
                 if (order.contentEquals("stop")) {
                     scanner.close();
                     System.exit(0);

@@ -1,15 +1,11 @@
 package main;
 
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 
 import dataBase.controller.DataBase;
-
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 
 // 一个LinkThread对应一个用户的连接
 public class LinkThread extends Thread {
@@ -17,9 +13,6 @@ public class LinkThread extends Thread {
     public static DataBase dataBase;
     private Socket socket;
     private String username;
-
-    public LinkThread() {
-    }
 
     public void run() {
         while (true) {
@@ -37,7 +30,7 @@ public class LinkThread extends Thread {
 
                 // 连接初始化
                 msg = new Message();
-                msg.msg1(dataOutputStream);
+                msg.msg01(dataOutputStream);
 
                 // 循环接收登录请求或者注册请求
                 while (true) {
@@ -47,7 +40,7 @@ public class LinkThread extends Thread {
                     if (messageNumber == 2) {
                         // 需要记录一下用户名
                         username = msg.getMessageField1();
-                        if (msg.msg2(dataBase, dataOutputStream)) {
+                        if (msg.msg02(dataBase, dataOutputStream)) {
                             // 添加socket关联
                             dataBase.addSocket(username, socket);
                             // 跳出循环
@@ -58,7 +51,7 @@ public class LinkThread extends Thread {
                     }
                     // 3号请求，注册请求
                     else if (messageNumber == 3) {
-                        msg.msg3(dataBase, dataOutputStream);
+                        msg.msg03(dataBase, dataOutputStream);
                     }
                     // 其余请求直接跳过
                 }
@@ -70,19 +63,19 @@ public class LinkThread extends Thread {
 
                     switch (messageNumber) {
                         // 注销
-                        case 0 -> msg.msg0(dataBase, username);
+                        case 0 -> msg.msg00(dataBase, username);
                         // 获取好友列表
-                        case 4 -> msg.msg4(dataBase, dataOutputStream, username);
+                        case 4 -> msg.msg04(dataBase, dataOutputStream, username);
                         // 获取历史消息列表
-                        case 5 -> msg.msg5(dataBase, dataOutputStream, username);
+                        case 5 -> msg.msg05(dataBase, dataOutputStream, username);
                         // 创建会话
-                        case 6 -> msg.msg6(dataBase, dataOutputStream, username);
+                        case 6 -> msg.msg06(dataBase, dataOutputStream, username);
                         // 将某用户加入会话
-                        case 7 -> msg.msg7(dataBase, dataOutputStream);
+                        case 7 -> msg.msg07(dataBase, dataOutputStream);
                         // 获取申请列表
-                        case 8 -> msg.msg8(dataBase, dataOutputStream, username);
+                        case 8 -> msg.msg08(dataBase, dataOutputStream, username);
                         // 发送信息
-                        case 9 -> msg.msg9(dataBase, username);
+                        case 9 -> msg.msg09(dataBase, username);
                         // 好友申请
                         case 10 -> msg.msg10(dataBase, username);
                         // 申请结果
@@ -90,11 +83,11 @@ public class LinkThread extends Thread {
                         // 获取结果列表
                         case 14 -> msg.msg14(dataBase, dataOutputStream, username);
                         // 删除好友
-                        case 15 -> msg.message15(dataBase, dataOutputStream, username);
+                        case 15 -> msg.msg15(dataBase, dataOutputStream, username);
                         // 退出群聊
-                        case 17 -> msg.message17(dataBase, username);
+                        case 17 -> msg.msg17(dataBase, username);
                         // 更新个人信息
-                        case 18 -> msg.message18(dataBase, username);
+                        case 18 -> msg.msg18(dataBase, username);
                     }
                     // 如果当前用户已注销，则跳出循环，释放socket连接
                     if (messageNumber == 0) {
@@ -119,6 +112,19 @@ public class LinkThread extends Thread {
                 System.err.println("异常：" + e);
             }
         }
+    }
 
+    public void forceOffline() {
+        if (socket == null) {
+            username = null;
+            return;
+        }
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        socket = null;
+        username = null;
     }
 }

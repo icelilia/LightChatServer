@@ -4,37 +4,33 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Request {
-    private String sessionId;
-    private String requesterUsername;
+    private final static SimpleDateFormat dateForm = new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss");
+    private int sessionId;
+    private String senderUsername;
     private String checkMessage;
     private String time;
 
-    public Request() {
-
-    }
-
-    public Request(int sessionId, String requesterUsername, String checkMessage, Date date) {
-        this.sessionId = String.valueOf(sessionId);
-        this.requesterUsername = requesterUsername;
+    public Request(int sessionId, String senderUsername, String checkMessage, Date date) {
+        this.sessionId = sessionId;
+        this.senderUsername = senderUsername;
         this.checkMessage = checkMessage;
-        final SimpleDateFormat dateForm = new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss");
         this.setTime(dateForm.format(date));
     }
 
-    public String getSessionId() {
+    public int getSessionId() {
         return sessionId;
     }
 
-    public void setSessionId(String kind) {
-        this.sessionId = kind;
+    public void setSessionId(int sessionId) {
+        this.sessionId = sessionId;
     }
 
-    public String getRequesterUsername() {
-        return requesterUsername;
+    public String getSenderUsername() {
+        return senderUsername;
     }
 
-    public void setRequesterUsername(String username) {
-        this.requesterUsername = username;
+    public void setSenderUsername(String username) {
+        this.senderUsername = username;
     }
 
     public String getCheckMessage() {
