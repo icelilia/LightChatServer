@@ -72,23 +72,23 @@ public class LinkThread extends Thread {
                         // 注销
                         case 0 -> msg.msg0(dataBase, username);
                         // 获取好友列表
-                        case 4 -> msg.message4(dataBase, dataOutputStream, username);
+                        case 4 -> msg.msg4(dataBase, dataOutputStream, username);
                         // 获取历史消息列表
-                        case 5 -> msg.message5(dataBase, dataOutputStream, username);
+                        case 5 -> msg.msg5(dataBase, dataOutputStream, username);
                         // 创建会话
-                        case 6 -> msg.message6(dataBase, dataOutputStream, username);
+                        case 6 -> msg.msg6(dataBase, dataOutputStream, username);
                         // 将某用户加入会话
-                        case 7 -> msg.message7(dataBase, dataOutputStream);
+                        case 7 -> msg.msg7(dataBase, dataOutputStream);
                         // 获取申请列表
-                        case 8 -> msg.message8(dataBase, dataOutputStream, username);
+                        case 8 -> msg.msg8(dataBase, dataOutputStream, username);
                         // 发送信息
-                        case 9 -> msg.message9(dataBase, username);
+                        case 9 -> msg.msg9(dataBase, username);
                         // 好友申请
-                        case 10 -> msg.message10(dataBase, username);
+                        case 10 -> msg.msg10(dataBase, username);
                         // 申请结果
-                        case 12 -> msg.message12(dataBase, username);
+                        case 12 -> msg.msg12(dataBase, username);
                         // 获取结果列表
-                        case 14 -> msg.message14(dataBase, dataOutputStream, username);
+                        case 14 -> msg.msg14(dataBase, dataOutputStream, username);
                         // 删除好友
                         case 15 -> msg.message15(dataBase, dataOutputStream, username);
                         // 退出群聊

@@ -22,10 +22,8 @@ public class Main {
             }
 
             // 回头可以加点服务器端的命令，像"stop"之类的
-            @SuppressWarnings("resource")
             Scanner scanner = new Scanner(System.in);
             String order;
-
             while (true) {
                 order = scanner.nextLine();
                 if (order.contentEquals("show users")) {
@@ -33,6 +31,7 @@ public class Main {
                     continue;
                 }
                 if (order.contentEquals("stop")) {
+                    scanner.close();
                     System.exit(0);
                 }
             }
